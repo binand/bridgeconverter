@@ -25,13 +25,17 @@ specific LIN format to the more common Portable Bridge Notation (PBN).
 
 Make the script executable:
 
+```sh
 chmod +x bridgeconverter
+```
 
 (Optional) Add to PATH:
 
+```sh
 mkdir -p ~/bin
 mv bridgeconverter ~/bin/
 export PATH="$HOME/bin:$PATH"
+```
 
 ---
 
@@ -39,12 +43,15 @@ export PATH="$HOME/bin:$PATH"
 
 ### 1. From LIN (stdin)
 
+```sh
 cat input.lin | bridgeconverter > output.pbn
+```
 
 ---
 
 ### 2. From BFH JSON (via curl)
 
+```sh
 curl -fsS "<bfh-url>" \
   | bridgeconverter \
       --input-driver=stdin \
@@ -52,11 +59,13 @@ curl -fsS "<bfh-url>" \
       --event="PUB Pairs" \
       --date="2026-03-01" \
   > output.pbn
+```
 
 ---
 
 ### 3. Direct BFH fetch
 
+```sh
 bridgeconverter \
   --input-driver=bfh \
   --bfh-event-id=360 \
@@ -64,11 +73,13 @@ bridgeconverter \
   --event="PUB Pairs" \
   --date="2026-03-01" \
   > event.pbn
+```
 
 ---
 
 ### 4. BBO Handviewer URL
 
+```sh
 bridgeconverter \
   --input-driver=bbo-url \
   --bbo-url=https://www.bridgebase.com/tools/handviewer.html?lin=... \
@@ -76,19 +87,20 @@ bridgeconverter \
   --event="PUB Pairs" \
   --date="2026-03-01" \
   > event.pbn
+```
 
 ---
 
 ## Boards Specification
 
---bfh-boards supports:
+`--bfh-boards` supports:
 
-- Single board: 5
-- Multiple boards: 1,3,7
-- Range: 1-16
-- Combination: 1,3-5,8
+- Single board: `5`
+- Multiple boards: `1,3,7`
+- Range: `1-16`
+- Combination: `1,3-5,8`
 
-Invalid ranges (e.g. 5-3) result in an error.
+Invalid ranges, such as `5-3`, result in an error.
 
 ---
 
@@ -103,22 +115,24 @@ Generated PBN includes:
   - Event, Site, Date
   - Contract, Declarer, Result, Lead, Score
 - Diagnostics:
-  - { INFO: ... }
-  - { ERROR: ... }
+  - `{ INFO: ... }`
+  - `{ ERROR: ... }`
 
 ---
 
 ## Dependencies
 
-- Python 3.9+
-- python-dateutil
+- `Python 3.9+`
+- `python-dateutil`
 
 Install:
 
+```sh
 pip install python-dateutil
+```
 
 ---
 
 ## License
 
-GPLv3 (https://www.gnu.org/licenses/gpl-3.0.en.html)
+[GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html)
