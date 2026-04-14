@@ -1,9 +1,6 @@
 import argparse
-import sys
 
-from bridge.drivers.input.stdin import StdinDriver
-from bridge.drivers.input.bfh import BfhDriver
-from bridge.drivers.input.bbo_url import BboUrlDriver
+from bridge.drivers.input import InputDriver, get_input_driver_for
 from bridge.drivers.output.pbn import PbnOutputDriver
 from bridge.converters.lin_pbn import LinPbnConverter
 from bridge.util.date import normalize_date
@@ -32,25 +29,7 @@ def main():
 
     date = normalize_date(args.date) if args.date else None
 
-    if args.input_driver == "stdin":
-        input_driver = StdinDriver(args.input_format)
-
-    elif args.input_driver == "bfh":
-        if not args.bfh_event_id:
-            print("ERROR: --bfh-event-id required", file=sys.stderr)
-            sys.exit(1)
-
-        input_driver = BfhDriver(args.bfh_event_id, args.bfh_boards)
-
-    elif args.input_driver == "bbo-url":
-        if not args.bbo_url:
-            print("ERROR: --bbo-url required for bbo-url driver", file=sys.stderr)
-            sys.exit(1)
-
-        input_driver = BboUrlDriver(args.bbo_url)
-
-    else:
-        raise ValueError("Unknown input driver")
+    input_driver: InputDriver = get_input_driver_for(args)
 
     converter = LinPbnConverter(args.event, date, args.site)
     output_driver = PbnOutputDriver()
